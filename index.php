@@ -1,178 +1,131 @@
+<?php 
+session_start(); 
+require('../config.php');
+?>
 <?php
-if (isset($_GET['generated']) && $_GET['generated'] == "false") {
-    unset($_GET['generated']);
-    echo '<script>alert("Timetable not generated yet!!");</script>';
+extract($_POST);
+if(isset($save))
+{
+	if($e=="" || $p=="")
+	{
+	$err="<font color='red'>fill all the fields first</font>";
+	}
+	else
+	{
+	//check login crenditial
+	$que=mysqli_query($con,"select * from admin where user_name='".$e."' and password='".$p."'");
+	$r=mysqli_num_rows($que);
+    echo $r;
+		if($r)
+		{
+			$_SESSION['admin']=$e;
+			header('location:admindashboard.php');
+		}
+		else
+		{
+			$err="<font color='red'>Invalid login details</font>";
+			
+			}
+	}
+	
 }
 ?>
-<!DOCTYPE html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="../bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<html lang="en">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>Automatic Time Table Generator</title>
-    <link href="assets/css/bootstrap.css" rel="stylesheet"/>
-    <link href="assets/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="assets/css/style.css" rel="stylesheet"/>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'/>
+    
+    <style>
+	a{margin-left:15px;text-decoration:none; font-size:20px}
+	a:hover{background:#FF0000;color:#FFFFFF;}
+	.carousel-inner > .item > img,
+	.carousel-inner > .item > a > 
+	img { margin:auto;}
+</style>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="../css/animate.min.css" type="text/css">
+    <script src="../js/jquery-2.1.3.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/creative.css" type="text/css">
+    <link href="../css/owl.carousel.css" rel="stylesheet">
+    <link href="../css/owl.theme.css" rel="stylesheet">
+    <link href="../css/owl.transitions.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    
+    <!--[endif]-->
 
 </head>
-<body>
-<div class="navbar navbar-inverse navbar-fixed-top " id="menu">
-    <div class="container">
-        <div align="center">
-            <h3 align="center"><img src="https://res.cloudinary.com/ds7in3gm3/image/upload/v1713366475/mrcet_logo2-removebg-preview_dl9txj.png"  style="height:50px"/> AUTOMATIC TIME TABLE GENERATOR FOR FACULTY</h3>
+
+ <body>
+ 
+      <!-- /.slider -->
+
+<header>
+        <div class="header-content">
+            <div class="header-content-inner">
+            <div class="row" align="center">
+<div class="col-md-5" align="center">
+               <form class="form-signin" method="POST">
+	    <h1 class="form-signin-heading"><font color="RED" size="+6">Admin Login</font></h2>
+        <h3><?php echo $err; ?></h3>
+        <label for="inputEmail" class="sr-only">User Name</label>
+        <input type="text" id="inputEmail" class="form-control" placeholder="Email address" required autofocus 
+        name="e" value="<?php echo @$e;?>"/>
+        
+        <br/><br/>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required 
+        name="p" value="<?php echo @$p;?>"/>
+        <div class="checkbox">
+         
+        </div><br/>
+        <input type="submit" value="Login " name="save" style="background-color: #09F; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;"/>
+        <button onclick="window.location.href='http://localhost/tt2/'" style="background-color: #09F; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">BACK</button>
+
+        
+		
+      </form>
+            </div>
         </div>
-    </div>
-</div>
+        </div>
+        </div>
+    </header>
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators" style="margin-bottom: 160px">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-    </ol>
-
+<!--container-->
     
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="assets/img/mech_banner.jpg" alt="CI dept">
-        </div>
+      <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
 
-        <div class="item">
-            <img src="assets/img/lab2.png" alt="Lab2">
-        </div>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- Plugin JavaScript -->
+    
+    <script src="../js/owl.carousel.js"></script>
+                         
 
-        <div class="item">
-            <img src="assets/img/lab1.jpg" alt="Lab1">
-        </div>
-
-         <div class="item">
-            <img src="assets/img/Aiml_img.png" alt="Lab">
-        </div> 
-    </div>
-</div>
-<script type="text/javascript">
-    function genpdf() {
-        var doc = new jsPDF();
-
-        doc.addHTML(document.getElementById('TT'), function () {
-            doc.save('demo timetable.pdf');
-        });
-        window.alert("Downloaded!");
-    }
-</script>
-<div align="center" STYLE="margin-top: 30px">
-<a href="http://localhost/tt2/admin" >
-  <button>Admin Login</button>
-
-<a href="http://localhost/scheduling" >
-  <button>FACULTY</button>
-  <style>
-    button {
-  background-color: #4CAF50;
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #3e8e41;
-}
-  </style>
-</a>
-</a>
-</div>
-<br>
-
-
-<div id="faculty-sec">
-    <div class="container set-pad">
-        <div class="row text-center">
-            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
-                <h1 data-scroll-reveal="enter from the bottom after 0.1s" class="header-line">OUR MANAGEMENT </h1>
-
-            </div>
-
-        </div>
-        <div class="row">
-    <div class="col-lg-3 col-md-3 col-sm-6" data-scroll-reveal="enter from the bottom after 0.5s">
-        <div class="faculty-div">
-            <img src="assets/img/faculty/founder.jpg" class="img-rounded"/>
-            <h3 align="center">Sri.Ch.Malla Reddy</h3>
-            <hr/>
-            <h4 align="center">Founder<br/>Chairman</h4>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-6" data-scroll-reveal="enter from the bottom after 0.5s">
-        <div class="faculty-div">
-            <img src="assets\img\faculty\director.jpeg" class="img-rounded"/>
-            <h3 align="center">Dr.VSK Reddy</h3>
-            <hr/>
-            <h4 align="center">Director<br/>MRGI</h4>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-6" data-scroll-reveal="enter from the bottom after 0.5s">
-        <div class="faculty-div">
-            <img src="assets/img/faculty/principal.jpg" class="img-rounded" />
-            <h3 align="center">Dr. S Srinivasa Rao</h3>
-            <hr/>
-            <h4 align="center">Principal<br/>MRCET</h4>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-6" data-scroll-reveal="enter from the bottom after 0.5s">
-        <div class="faculty-div">
-            <img src="assets/img/faculty/hod.jpg" class="img-rounded"/>
-            <h3 align="center">Dr.Sujatha</h3>
-            <hr/>
-            <h4 align="center">HOD<br/>CI-DEPT</h4>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row set-row-pad">
-        <div class="col-lg-4 col-md-4 col-sm-4   col-lg-offset-1 col-md-offset-1 col-sm-offset-1 "
-             data-scroll-reveal="enter from the bottom after 0.4s">
-
-            <h2><strong>Our Location </strong></h2>
-            <hr/>
-            <div>
-                <h4>Maisammaguda, Secunderabad,Telangana,
-                </h4>
-                <h4>India - 500 100</h4>
-                <h4><strong>Call:</strong> 9133555183, 9133555162  </h4>
-                <h4><strong>Email: </strong>mrcet2004@gmail.com</h4>
-                <h4><strong>Website: </strong><a href="https://mrcet.com/" target="_blank_">mrcet.com</a></h4>
-            </div>
-
-
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4   col-lg-offset-1 col-md-offset-1 col-sm-offset-1"
-             data-scroll-reveal="enter from the bottom after 0.4s">
-
-            <h2><strong>Social Conectivity </strong></h2>
-            <hr/>
-            <div>
-                <a href="https://www.facebook.com/mrcetofficial/"> <img src="assets/img/Social/facebook.png" alt=""/> </a>
-                <a href="#"> <img src="assets/img/Social/google-plus.png" alt=""/></a>
-                <a href="https://x.com/mrcet_official"> <img src="assets/img/Social/twitter.png" alt=""/></a>
-            </div>
-        </div>
-
-
-    </div>
-</div>
-<script src="assets/js/jquery-1.10.2.js"></script>
-<script src="assets/js/bootstrap.js"></script>
-<script src="assets/js/jquery.flexslider.js"></script>
-<script src="assets/js/scrollReveal.js"></script>
-<script src="assets/js/jquery.easing.min.js"></script>
-<script src="assets/js/custom.js"></script>
-</div>
-</body>
+    </body>
 </html>
